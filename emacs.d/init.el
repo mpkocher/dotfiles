@@ -1,14 +1,15 @@
 ;; Custom MK settings
 ;; Disable toolbar in GUI
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+;;(menu-bar-mode -1)
 
 ;;
 ;; only do this in the window mode. It looks wrong in terminal
-(if window-system
-    (menu-bar-mode 1)
-  (global-linum-mode 1))
-
+;;(if window-system
+;;    (menu-bar-mode 1)
+;;  (global-linum-mode 1))
+(global-linum-mode 1)
+;;
 ;; Package Manager
 (require 'package)
 (add-to-list 'package-archives
@@ -21,7 +22,7 @@
     (package-refresh-contents))
 
 (defvar prelude-packages
-    '(clojure-mode pylint scala-mode2 haskell-mode markdown-mode yaml-mode yasnippet)
+    '(clojure-mode pylint scala-mode2 haskell-mode markdown-mode yaml-mode yasnippet graphviz-dot-mode fsharp-mode)
       "A list of packages to ensure are installed at launch.")
 
 (dolist (p prelude-packages)
@@ -34,19 +35,36 @@
 ;(autoload 'python-pylint "python-pylint")
 ;(autoload 'pylint "python-pylint")
 
+;; F# autocomplete
+(add-hook 'fsharp-mode-hook
+ (lambda ()
+   ;; (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-eval-region)
+   (define-key fsharp-mode-map (kbd "M-RET") 'fsharp-ac/complete-at-point)))
+
+;; Reasonable 
+(defun set-newline-and-indent ()
+      (local-set-key (kbd "RET") 'newline-and-indent))
+
+(add-hook 'ruby-mode-hook 'set-newline-and-indent)
+
+
 ;; Scala Support
 (require 'scala-mode2)
 
-(load-theme 'jadedragon)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("3b7e62b9884f1533f8eac5d21b252e5b8098274d7d9096521db84e4f10797ae3" default))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Python 
+(elpy-enable)
+(elpy-use-ipython)
+;; cleaner modeline
+(elpy-clean-modeline)
+
+
+;; Ruby This needs rsense
+;; http://stackoverflow.com/questions/12160209/emacs-auto-complete-installed-by-package-from-http-marmalade-repo-org-doesnt
+(require 'auto-complete)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(require 'auto-complete-config)
+(ac-config-default)
+
+;;(load-theme 'fogus)
+;;(load-theme 'jadedragon)
+(load-theme 'hickey)
