@@ -34,6 +34,14 @@
 ; (global-linum-mode 1)
 (column-number-mode 1)
 
+; http://www.emacswiki.org/emacs/EmacsForMacOS#toc12
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+; Don't open up files in a new Frame
+(setq ns-pop-up-frames nil)
+
 ; System specific functions
 (defun system-is-mac ()
   (interactive)
@@ -45,8 +53,8 @@
 
 ;; Package Manager
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 
 
 (package-initialize)
@@ -55,7 +63,7 @@
     (package-refresh-contents))
 
 (defvar prelude-packages
-  '(ace-jump-mode nrepl clojure-mode magit pylint scala-mode2 haskell-mode markdown-mode yasnippet graphviz-dot-mode fsharp-mode highlight-escape-sequences exec-path-from-shell)
+  '(sr-speedbar org ace-jump-mode nrepl clojure-mode magit pylint scala-mode2 haskell-mode markdown-mode yasnippet graphviz-dot-mode fsharp-mode highlight-escape-sequences exec-path-from-shell)
       "A list of packages to ensure are installed at launch.")
 
 (dolist (p prelude-packages)
@@ -66,6 +74,40 @@
 ; shells run within emacs will not the expected env.
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
+
+; OrgMode
+;; The following lines are always needed.  Choose your own keys.
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+;(global-set-key "\C-cl" 'org-store-link)
+;(global-set-key "\C-ca" 'org-agenda)
+;(global-set-key "\C-cb" 'org-iswitchb)
+;(global-font-lock-mode 1)                     ; for all buffers
+(add-hook 'org-mode-hook 'turn-on-font-lock)  ; Org buffers only
+(transient-mark-mode 1)
+(setq org-log-done t
+      org-hide-leading-stars t
+      org-odd-levels-only t
+      org-agenda-include-diary t)
+
+; speedbar
+(require 'sr-speedbar)
+
+(require 'org-mouse)
+;(setq org-agenda-files 
+;      (list "/home/fxr/org/work.org"))
+
+(require 'org-install)
+(setq org-directory "~/org/"
+      org-mobile-directory "~/Dropbox/org/"
+      org-mobile-inbox-for-pull "~/org/from-mobile.org")
+
+; ESS R integration
+(require 'ess)
+; set R exe
+
+
+; auto complete
+(setq ess-use-auto-complete 'script-only)
 
 ; AceJump goodness
 (require 'ace-jump-mode)
@@ -85,11 +127,7 @@
 (require 'smex)
 (smex-initialize)
 
-;; Javascript
-(require 'js2-mode)
-(require 'nodejs-repl)
-
-;(require 'magit)
+(require 'magit)
 
 ; Load pylint
 ;(autoload 'python-pylint "python-pylint")
@@ -114,6 +152,18 @@
 (setq inferior-lisp-program "sbcl")
 (require 'slime)
 
+;; Javascript
+(require 'js2-mode)
+(require 'nodejs-repl)
+
+;; Javascript Swank
+(require 'slime-js)
+
+
+;Finally, you will want to set up slime-js-minor-mode when the javascript mode of your choice is enabled:
+;(add-hook ‘js-mode-hook (lambda () (slime-js-minor-mode 1)))
+
+
 ; Scala Support
 (require 'scala-mode2)
 
@@ -121,6 +171,7 @@
 (when (require 'elpy nil t)
   (elpy-enable)
   ;; Use the system python virtualenv with emacs.
+  ;(virtualenv-workon "dev_pbcore")
   (virtualenv-workon "emacs")
   ;; cleaner modeline
   ;;(elpy-clean-modeline)
@@ -129,6 +180,9 @@
   ;; use iPython
   (setq py-shell-name "ipython")
 )
+
+; IPython Notebook via eic
+;(require 'eic)
 
 ; Company
 (require 'company)
