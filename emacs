@@ -1,3 +1,4 @@
+;; -*- mode: Lisp
 ;; Aquamacs will load this on initialization
 
 (tool-bar-mode 0) ;; turn off toolbar
@@ -31,6 +32,7 @@
     elpy
     ess
     projectile
+    flx-ido
     js2-mode))
 
 ;; Install packages if necessary
@@ -46,8 +48,10 @@
 (load-theme 'bubbleberry)
 
 (projectile-global-mode)
-;(setq projectile-completion-system 'helm)
-;(helm-projectile-on)
+;; (setq projectile-completion-system 'helm)
+;; (helm-projectile-on)
+
+(require 'flx-ido)   
 
 ;; Better M-x
 (require 'smex)
