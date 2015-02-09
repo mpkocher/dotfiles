@@ -1,8 +1,11 @@
-;; -*- mode: Lisp
+;; -*- Mode: Lisp
 ;; Aquamacs will load this on initialization
 
 (tool-bar-mode 0) ;; turn off toolbar
 (scroll-bar-mode -1) ;; No scroll bar
+
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
 
 (require 'package)
 (add-to-list 'package-archives
@@ -28,10 +31,14 @@
     ace-jump-mode
     scala-mode2
     sbt-mode
+    py-autopep8
     virtualenvwrapper
     elpy
     ess
+    auto-complete
+    dired+
     projectile
+    helm-projectile 
     flx-ido
     js2-mode))
 
@@ -49,7 +56,8 @@
 
 (projectile-global-mode)
 ;; (setq projectile-completion-system 'helm)
-;; (helm-projectile-on)
+(require 'helm-projectile)
+(helm-projectile-on)
 
 (require 'flx-ido)   
 
