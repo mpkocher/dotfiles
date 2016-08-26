@@ -1,4 +1,3 @@
-Fabric
 Sphinx
 autopep8
 futures
@@ -8,11 +7,9 @@ ipython
 #matplotlib
 networkx
 nose
-#objgraph
 pep8
 pylint
 pytest
 requests
 xmlbuilder
-yolk
-pyparsing==1.5.7 # This is for pydot which 2.0.0 is py3k
+# Fabric # migrating away from using this
