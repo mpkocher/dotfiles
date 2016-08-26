@@ -1,18 +1,17 @@
-;; -*- Mode: Lisp
+;; -*- mode: Lisp
 ;; Aquamacs will load this on initialization
 
 (tool-bar-mode 0) ;; turn off toolbar
 (scroll-bar-mode -1) ;; No scroll bar
 
-(setq inhibit-splash-screen t)
-(setq inhibit-startup-message t)
-
+;; Package Manager
 (require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+;; See this for details on how each system is different
+;; https://www.emacswiki.org/emacs/ELPA_
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
 
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 (package-initialize)
 
@@ -26,20 +25,21 @@
 
 (defvar required-packages
   '(smex
-    powerline
     magit
+    smart-mode-line
     ace-jump-mode
     scala-mode2
     sbt-mode
-    py-autopep8
+    request
     virtualenvwrapper
     elpy
     ess
-    auto-complete
+    scala-mode2
+    ensime
     dired+
     projectile
-    helm-projectile 
     flx-ido
+    rainbow-delimiters
     js2-mode))
 
 ;; Install packages if necessary
@@ -52,12 +52,15 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-(load-theme 'bubbleberry)
+;;(load-theme 'bubbleberry)
+(load-theme 'dracula t)
+
+;kj(require 'rainbow-delimiters)
+;; (global-rainbow-delimiters-mode)
 
 (projectile-global-mode)
 ;; (setq projectile-completion-system 'helm)
-(require 'helm-projectile)
-(helm-projectile-on)
+;; (helm-projectile-on)
 
 (require 'flx-ido)   
 
@@ -68,9 +71,11 @@
 ;; Better Dired+
 (require 'dired+)
 
-;; Better
-(require 'powerline)
-(powerline-default-theme)
+;; Get around emacs always asking of loading themes
+(setq sml/no-confirm-load-theme t)
+
+;; Better Powerline
+(sml/setup)
 
 ;; Eshell tweaks
 ;; http://www.howardism.org/Technical/Emacs/eshell-fun.html
@@ -117,7 +122,7 @@ directory to make multiple eshell windows easier."
 
 ;; New elpy config
 (elpy-enable)
-(elpy-use-ipython)
+;(elpy-use-ipython)
 (setq elpy-rpc-backend "jedi")
 
 ;; Python 
@@ -128,7 +133,7 @@ directory to make multiple eshell windows easier."
  (venv-workon "emacs")
 ;;  cleaner modeline
  (setq elpy-rpc-backend "jedi")
- (elpy-use-ipython)
+; (elpy-use-ipython)
 ;  use iPython
  (setq py-shell-name "ipython")
 )
