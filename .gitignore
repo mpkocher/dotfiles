@@ -1,0 +1,3 @@
+pads/**/target/**
+pads/**/projects/target/**
+.ensime
