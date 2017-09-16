@@ -1,0 +1,4 @@
+pads/**/target/**
+pads/**/projects/target/**
+pads/**/Pad.sc
+.ensime
